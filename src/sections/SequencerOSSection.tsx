@@ -153,15 +153,7 @@ export default function SequencerOSSection() {
   ];
 
   return (
-    <section
-      id="sequencer"
-      className="scroll-mt-32"
-      style={{
-        opacity: 0,
-        animation: "fadeInUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards",
-        animationDelay: "0.3s",
-      }}
-    >
+    <section id="sequencer" className="scroll-mt-32 fade-in-section delay-3">
       <div className="glass-card-dark p-6 md:p-12 relative overflow-hidden">
         <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#4CD3B3]/15 blur-[120px] rounded-full pointer-events-none" />
         <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-[#0071e3]/10 blur-[100px] rounded-full pointer-events-none" />

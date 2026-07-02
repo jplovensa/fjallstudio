@@ -1,6 +1,6 @@
 export default function HubSpokeSection() {
   return (
-    <section className="pt-4" style={{ opacity: 0, animation: "fadeInUp 0.8s cubic-bezier(0.2,0.8,0.2,1) forwards", animationDelay: "0.6s" }}>
+    <section className="pt-4 fade-in-section delay-6">
       <div className="glass-card p-10 lg:p-14">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div>

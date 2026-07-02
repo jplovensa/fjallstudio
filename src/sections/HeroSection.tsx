@@ -2,14 +2,7 @@ import FjallLogo from "@/components/FjallLogo";
 
 export default function HeroSection() {
   return (
-    <header
-      className="text-center py-20 md:py-28"
-      style={{
-        opacity: 0,
-        animation: "fadeInUp 0.8s cubic-bezier(0.2,0.8,0.2,1) forwards",
-        animationDelay: "0.1s",
-      }}
-    >
+    <header className="text-center py-20 md:py-28 fade-in-section delay-1">
       <div className="flex justify-center mb-8">
         <div className="bg-black/90 rounded-3xl px-8 py-5 shadow-2xl" style={{ animation: "pulseGlow 3s infinite" }}>
           <FjallLogo className="h-14 md:h-18" />

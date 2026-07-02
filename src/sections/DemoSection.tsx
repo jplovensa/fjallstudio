@@ -27,15 +27,7 @@ export default function DemoSection() {
   ];
 
   return (
-    <section
-      id="demo"
-      className="scroll-mt-32"
-      style={{
-        opacity: 0,
-        animation: "fadeInUp 0.8s cubic-bezier(0.2,0.8,0.2,1) forwards",
-        animationDelay: "0.6s",
-      }}
-    >
+    <section id="demo" className="scroll-mt-32 fade-in-section delay-6">
       <div className="glass-card-dark p-6 md:p-10 relative overflow-hidden">
         <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-[#4CD3B3]/6 blur-[100px] rounded-full pointer-events-none" />
 
@@ -87,7 +79,7 @@ export default function DemoSection() {
               <>
                 <video
                   ref={videoRef}
-                  src="./assets/fjall-journey.mp4"
+                  src={`${import.meta.env.BASE_URL}assets/fjall-journey.mp4`}
                   className="w-full h-full object-cover"
                   playsInline
                   onEnded={() => setIsPlaying(false)}

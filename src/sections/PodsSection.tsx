@@ -1,14 +1,6 @@
 export default function PodsSection() {
   return (
-    <section
-      id="hardware"
-      className="scroll-mt-32"
-      style={{
-        opacity: 0,
-        animation: "fadeInUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards",
-        animationDelay: "0.2s",
-      }}
-    >
+    <section id="hardware" className="scroll-mt-32 fade-in-section delay-2">
       <div className="glass-card p-6 md:p-12 overflow-hidden relative">
         <div className="text-center mb-8 md:mb-10">
           <h2 className="text-4xl font-display font-bold tracking-tight mb-4">

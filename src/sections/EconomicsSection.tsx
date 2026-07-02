@@ -49,7 +49,7 @@ export default function EconomicsSection() {
   ];
 
   return (
-    <section id="economics" className="scroll-mt-32" style={{ opacity: 0, animation: "fadeInUp 0.8s cubic-bezier(0.2,0.8,0.2,1) forwards", animationDelay: "0.7s" }}>
+    <section id="economics" className="scroll-mt-32 fade-in-section delay-7">
       <div className="text-center mb-8">
         <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#4CD3B3]/10 rounded-full border border-[#4CD3B3]/20 mb-4">
           <span className="text-[10px] font-bold uppercase tracking-widest text-[#3D867C]">Investor Intelligence</span>

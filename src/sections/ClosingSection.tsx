@@ -2,7 +2,7 @@ import FjallLogo from "@/components/FjallLogo";
 
 export default function ClosingSection() {
   return (
-    <section className="pt-16 md:pt-32 pb-8" style={{ opacity: 0, animation: "fadeInUp 0.8s cubic-bezier(0.2,0.8,0.2,1) forwards", animationDelay: "0.8s" }}>
+    <section className="pt-16 md:pt-32 pb-8 fade-in-section delay-7">
       <div className="text-center px-4 max-w-4xl mx-auto">
         <div className="flex justify-center mb-10">
           <div className="bg-black/90 rounded-2xl px-6 py-4 shadow-xl">

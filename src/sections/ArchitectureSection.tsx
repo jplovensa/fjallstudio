@@ -26,15 +26,7 @@ export default function ArchitectureSection() {
   }, [isPlaying]);
 
   return (
-    <section
-      id="architecture"
-      className="scroll-mt-32"
-      style={{
-        opacity: 0,
-        animation: "fadeInUp 0.8s cubic-bezier(0.2,0.8,0.2,1) forwards",
-        animationDelay: "0.5s",
-      }}
-    >
+    <section id="architecture" className="scroll-mt-32 fade-in-section delay-5">
       <div className="glass-card-dark p-6 md:p-12 relative overflow-hidden">
         <div className="absolute top-0 left-0 w-[400px] h-[400px] bg-[#4CD3B3]/6 blur-[120px] rounded-full pointer-events-none" />
         <div className="absolute bottom-0 right-0 w-[300px] h-[300px] bg-[#0071e3]/6 blur-[100px] rounded-full pointer-events-none" />

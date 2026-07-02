@@ -41,10 +41,16 @@
   .ambient-mesh {
     position: fixed; top: 0; left: 0; right: 0; bottom: 0;
     z-index: -1; background: #fbfbfd; overflow: hidden;
+    /* isolation needed so mix-blend-mode on children doesn't flatten in Safari */
+    isolation: isolate;
   }
   .mesh-orb {
     position: absolute; border-radius: 50%;
-    filter: blur(120px); opacity: 0.5; mix-blend-mode: multiply;
+    filter: blur(120px); opacity: 0.5;
+    /* mix-blend-mode: multiply crashes compositing on Mobile Safari — removed */
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    will-change: transform;
   }
 
   /* Glass Cards */
@@ -92,6 +98,9 @@
     height: 620px;
     border-bottom-left-radius: 33px;
     border-bottom-right-radius: 33px;
+    /* Safari: force GPU layer so child preserve-3d works inside overflow:hidden */
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
   }
 
   /* App Tabs */
@@ -219,11 +228,31 @@
   }
 }
 
-/* Keyframes */
+/* Keyframes — both prefixed and unprefixed for Safari */
+@-webkit-keyframes fadeInUp {
+  0% { opacity: 0; -webkit-transform: translateY(40px) scale(0.98); transform: translateY(40px) scale(0.98); }
+  100% { opacity: 1; -webkit-transform: translateY(0) scale(1); transform: translateY(0) scale(1); }
+}
 @keyframes fadeInUp {
   0% { opacity: 0; transform: translateY(40px) scale(0.98); }
   100% { opacity: 1; transform: translateY(0) scale(1); }
 }
+
+/* Safari-safe fade-in utility classes */
+.fade-in-section {
+  opacity: 0;
+  -webkit-animation: fadeInUp 0.8s cubic-bezier(0.2,0.8,0.2,1) both;
+  animation: fadeInUp 0.8s cubic-bezier(0.2,0.8,0.2,1) both;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+}
+.fade-in-section.delay-1 { -webkit-animation-delay: 0.1s; animation-delay: 0.1s; }
+.fade-in-section.delay-2 { -webkit-animation-delay: 0.2s; animation-delay: 0.2s; }
+.fade-in-section.delay-3 { -webkit-animation-delay: 0.3s; animation-delay: 0.3s; }
+.fade-in-section.delay-4 { -webkit-animation-delay: 0.4s; animation-delay: 0.4s; }
+.fade-in-section.delay-5 { -webkit-animation-delay: 0.5s; animation-delay: 0.5s; }
+.fade-in-section.delay-6 { -webkit-animation-delay: 0.6s; animation-delay: 0.6s; }
+.fade-in-section.delay-7 { -webkit-animation-delay: 0.7s; animation-delay: 0.7s; }
 @keyframes spin360 {
   0% { transform: rotateX(60deg) rotateZ(-40deg); }
   100% { transform: rotateX(60deg) rotateZ(320deg); }
