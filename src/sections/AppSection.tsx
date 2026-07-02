@@ -24,18 +24,28 @@ function ShowroomCube() {
   const s = 70;
   const h = 50;
   return (
-    <div style={{ width: s, height: s, transformStyle: "preserve-3d", transform: "rotateX(60deg) rotateZ(-40deg)", position: "relative", animation: "spinSlow 20s linear infinite", flexShrink: 0 }}>
-      <div style={{ position: "absolute", width: s, height: s, background: "linear-gradient(135deg,#1a2f2f,#0f1e1e)", border: "1px solid rgba(76,211,179,0.3)", transform: "translateZ(0)", boxShadow: "0 0 30px rgba(76,211,179,0.15)" }} />
-      <div style={{ position: "absolute", width: s, height: h, background: "linear-gradient(to bottom,rgba(76,211,179,0.18),rgba(76,211,179,0.04))", border: "1px solid rgba(76,211,179,0.35)", transformOrigin: "top", transform: "rotateX(90deg)", top: 0 }}>
+    <div style={{
+      width: s, height: s,
+      WebkitTransformStyle: "preserve-3d" as const,
+      transformStyle: "preserve-3d" as const,
+      WebkitTransform: "rotateX(60deg) rotateZ(-40deg)",
+      transform: "rotateX(60deg) rotateZ(-40deg)",
+      position: "relative",
+      WebkitAnimation: "spinSlow 20s linear infinite",
+      animation: "spinSlow 20s linear infinite",
+      flexShrink: 0,
+    }}>
+      <div style={{ position: "absolute", width: s, height: s, background: "linear-gradient(135deg,#1a2f2f,#0f1e1e)", border: "1px solid rgba(76,211,179,0.3)", WebkitTransform: "translateZ(0)", transform: "translateZ(0)", boxShadow: "0 0 30px rgba(76,211,179,0.15)" }} />
+      <div style={{ position: "absolute", width: s, height: h, background: "linear-gradient(to bottom,rgba(76,211,179,0.18),rgba(76,211,179,0.04))", border: "1px solid rgba(76,211,179,0.35)", WebkitTransformOrigin: "top", transformOrigin: "top", WebkitTransform: "rotateX(90deg)", transform: "rotateX(90deg)", top: 0 }}>
         <div style={{ position: "absolute", top: 12, left: 14, width: 16, height: 12, border: "1px solid rgba(76,211,179,0.4)", background: "rgba(76,211,179,0.08)" }} />
         <div style={{ position: "absolute", top: 12, left: 42, width: 16, height: 12, border: "1px solid rgba(76,211,179,0.4)", background: "rgba(76,211,179,0.08)" }} />
       </div>
-      <div style={{ position: "absolute", width: h, height: s, background: "linear-gradient(to right,rgba(76,211,179,0.14),rgba(76,211,179,0.03))", border: "1px solid rgba(76,211,179,0.3)", transformOrigin: "left", transform: "rotateY(-90deg)", left: 0 }}>
+      <div style={{ position: "absolute", width: h, height: s, background: "linear-gradient(to right,rgba(76,211,179,0.14),rgba(76,211,179,0.03))", border: "1px solid rgba(76,211,179,0.3)", WebkitTransformOrigin: "left", transformOrigin: "left", WebkitTransform: "rotateY(-90deg)", transform: "rotateY(-90deg)", left: 0 }}>
         <div style={{ position: "absolute", top: 18, left: 10, width: 16, height: 30, border: "1px solid rgba(76,211,179,0.4)", borderBottom: "none", background: "rgba(76,211,179,0.06)" }} />
       </div>
-      <div style={{ position: "absolute", width: h, height: s, background: "linear-gradient(to left,rgba(76,211,179,0.08),rgba(76,211,179,0.02))", border: "1px solid rgba(76,211,179,0.2)", transformOrigin: "right", transform: "rotateY(90deg)", right: 0 }} />
-      <div style={{ position: "absolute", width: s, height: h, background: "linear-gradient(to top,rgba(76,211,179,0.06),rgba(76,211,179,0.02))", border: "1px solid rgba(76,211,179,0.2)", transformOrigin: "bottom", transform: "rotateX(-90deg)", bottom: 0 }} />
-      <div style={{ position: "absolute", width: s + 2, height: s + 2, background: "linear-gradient(135deg,rgba(76,211,179,0.22),rgba(61,134,124,0.15))", transform: "translate(-1px,-1px) translateZ(50px)", border: "1px solid rgba(76,211,179,0.4)", borderRadius: 2, boxShadow: "0 0 25px rgba(76,211,179,0.2)" }} />
+      <div style={{ position: "absolute", width: h, height: s, background: "linear-gradient(to left,rgba(76,211,179,0.08),rgba(76,211,179,0.02))", border: "1px solid rgba(76,211,179,0.2)", WebkitTransformOrigin: "right", transformOrigin: "right", WebkitTransform: "rotateY(90deg)", transform: "rotateY(90deg)", right: 0 }} />
+      <div style={{ position: "absolute", width: s, height: h, background: "linear-gradient(to top,rgba(76,211,179,0.06),rgba(76,211,179,0.02))", border: "1px solid rgba(76,211,179,0.2)", WebkitTransformOrigin: "bottom", transformOrigin: "bottom", WebkitTransform: "rotateX(-90deg)", transform: "rotateX(-90deg)", bottom: 0 }} />
+      <div style={{ position: "absolute", width: s + 2, height: s + 2, background: "linear-gradient(135deg,rgba(76,211,179,0.22),rgba(61,134,124,0.15))", WebkitTransform: "translate(-1px,-1px) translateZ(50px)", transform: "translate(-1px,-1px) translateZ(50px)", border: "1px solid rgba(76,211,179,0.4)", borderRadius: 2, boxShadow: "0 0 25px rgba(76,211,179,0.2)" }} />
     </div>
   );
 }

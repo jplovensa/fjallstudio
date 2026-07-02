@@ -33,6 +33,9 @@
     -moz-osx-font-smoothing: grayscale;
     overflow-x: hidden;
     font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", system-ui, sans-serif;
+    /* Safe-area padding for iPhone notch/home indicator */
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
   }
 }
 
@@ -41,13 +44,13 @@
   .ambient-mesh {
     position: fixed; top: 0; left: 0; right: 0; bottom: 0;
     z-index: -1; background: #fbfbfd; overflow: hidden;
-    /* isolation needed so mix-blend-mode on children doesn't flatten in Safari */
+    /* isolation prevents mix-blend-mode from flattening compositing layers in Safari */
     isolation: isolate;
   }
   .mesh-orb {
     position: absolute; border-radius: 50%;
     filter: blur(120px); opacity: 0.5;
-    /* mix-blend-mode: multiply crashes compositing on Mobile Safari — removed */
+    /* mix-blend-mode: multiply removed — crashes compositing on Mobile Safari */
     -webkit-transform: translateZ(0);
     transform: translateZ(0);
     will-change: transform;
@@ -56,7 +59,8 @@
   /* Glass Cards */
   .glass-card {
     background: rgba(255,255,255,0.6);
-    backdrop-filter: blur(40px); -webkit-backdrop-filter: blur(40px);
+    -webkit-backdrop-filter: blur(40px);
+    backdrop-filter: blur(40px);
     border: 1px solid rgba(255,255,255,0.8); border-radius: 2rem;
     box-shadow: 0 8px 32px 0 rgba(31,38,135,0.05);
     transition: all 0.4s cubic-bezier(0.2,0.8,0.2,1);
@@ -67,7 +71,8 @@
   }
   .glass-card-dark {
     background: rgba(30,30,32,0.8);
-    backdrop-filter: blur(40px); -webkit-backdrop-filter: blur(40px);
+    -webkit-backdrop-filter: blur(40px);
+    backdrop-filter: blur(40px);
     border: 1px solid rgba(255,255,255,0.1); border-radius: 2rem;
     box-shadow: 0 12px 40px 0 rgba(0,0,0,0.25); color: white;
   }
@@ -75,7 +80,8 @@
   /* Dynamic Island Nav */
   .dynamic-island {
     background: rgba(0,0,0,0.85);
-    backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
     color: white; border-radius: 999px;
     box-shadow: 0 10px 25px rgba(0,0,0,0.2);
   }
@@ -93,21 +99,25 @@
     width: 96px; height: 26px; background: #000; border-radius: 18px; z-index: 50;
   }
   .iphone-screen {
-    background: #000; border-radius: 33px; overflow: hidden;
+    background: #000; border-radius: 33px;
     position: relative;
     height: 620px;
     border-bottom-left-radius: 33px;
     border-bottom-right-radius: 33px;
-    /* Safari: force GPU layer so child preserve-3d works inside overflow:hidden */
-    -webkit-transform: translateZ(0);
-    transform: translateZ(0);
+    overflow: hidden;
+    /* Safari: force GPU compositing layer so preserve-3d children work inside overflow:hidden */
+    -webkit-transform: translate3d(0,0,0);
+    transform: translate3d(0,0,0);
+    -webkit-transform-style: flat;
+    transform-style: flat;
   }
 
   /* App Tabs */
   .app-tab-bar {
     position: absolute; bottom: 0; left: 0; right: 0;
     background: rgba(20,20,20,0.92);
-    backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
     border-top: 1px solid rgba(255,255,255,0.06);
     border-bottom-left-radius: 33px;
     border-bottom-right-radius: 33px;
@@ -119,21 +129,35 @@
   .app-tab-btn {
     display: flex; flex-direction: column; align-items: center; gap: 1px;
     background: none; border: none; color: #555; font-size: 9px; font-weight: 500;
-    cursor: pointer; transition: all 0.2s; padding: 3px 4px;
+    cursor: pointer; transition: color 0.2s; padding: 3px 4px;
+    /* Prevent callout/selection on tap in Safari */
+    -webkit-user-select: none; user-select: none;
+    -webkit-tap-highlight-color: transparent;
   }
   .app-tab-btn.active { color: #4CD3B3; }
   .app-tab-btn:hover { color: #fff; }
   .app-tab-icon { font-size: 16px; line-height: 1; }
 
-  /* App Screens */
+  /* App Screens
+     Safari cannot transition display:none → flex so we use
+     visibility + opacity instead — keeps the element in the
+     layout flow but invisible, avoiding the blank-screen bug. */
   .app-screen {
     position: absolute; inset: 0;
-    display: none; flex-direction: column;
-    opacity: 0; transition: opacity 0.3s ease;
+    display: flex; flex-direction: column;
+    visibility: hidden;
+    opacity: 0;
+    /* pointer-events off so hidden screens don't intercept taps */
+    pointer-events: none;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
     overflow: hidden;
     padding-bottom: 58px;
   }
-  .app-screen.active { display: flex; opacity: 1; }
+  .app-screen.active {
+    visibility: visible;
+    opacity: 1;
+    pointer-events: auto;
+  }
   .app-scroll {
     overflow-y: auto;
     flex: 1;
@@ -146,6 +170,7 @@
     display: flex; align-items: center; justify-content: center;
   }
   .iso-cube {
+    -webkit-transform-style: preserve-3d;
     transform-style: preserve-3d;
     transform: rotateX(60deg) rotateZ(-40deg);
     position: relative;
@@ -165,6 +190,7 @@
   .pipeline-card {
     width: 80px; height: 80px; border-radius: 1.5rem;
     background: rgba(255,255,255,0.03);
+    -webkit-backdrop-filter: blur(20px);
     backdrop-filter: blur(20px);
     border: 1px solid rgba(255,255,255,0.1);
     display: flex; align-items: center; justify-content: center;
@@ -174,6 +200,7 @@
     position: relative; z-index: 10;
   }
   .pipeline-card:hover {
+    -webkit-transform: scale(1.1);
     transform: scale(1.1);
     background: rgba(255,255,255,0.08);
     border-color: rgba(255,255,255,0.3);
@@ -220,25 +247,313 @@
     transition: all 0.3s ease;
   }
   .dash-metric:hover {
+    -webkit-transform: translateY(-2px);
     transform: translateY(-2px);
     box-shadow: 0 8px 24px rgba(0,0,0,0.08);
   }
   .dash-dark {
     background: #1d1d1f; border-radius: 1.25rem; padding: 1.25rem; color: white;
   }
+
+  /* SequencerOS iPad mockup */
+  .ipad-mockup {
+    background: #1a1a1a;
+    border-radius: 20px;
+    padding: 16px;
+    box-shadow: 0 40px 80px -20px rgba(0,0,0,0.8), inset 0 0 0 2px #333;
+  }
+  .os-nav {
+    position: absolute; left: 0; top: 0; bottom: 0;
+    width: 56px; background: rgba(15,15,15,0.95);
+    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
+    border-right: 1px solid rgba(255,255,255,0.06);
+    display: flex; flex-direction: column; align-items: center;
+    gap: 8px; padding: 16px 0; z-index: 20;
+  }
+  .os-nav-btn {
+    width: 40px; height: 40px; border-radius: 12px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.06);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; cursor: pointer;
+    transition: all 0.2s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .os-nav-btn.active {
+    background: rgba(76,211,179,0.15);
+    border-color: rgba(76,211,179,0.4);
+    box-shadow: 0 0 20px rgba(76,211,179,0.2);
+  }
+  .os-canvas {
+    position: absolute; inset: 0; left: 56px; right: 280px;
+    overflow: hidden; display: flex; align-items: center; justify-content: center;
+  }
+  .os-sidebar {
+    position: absolute; top: 0; right: 0; bottom: 0; width: 280px;
+    background: rgba(15,15,15,0.9);
+    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
+    border-left: 1px solid rgba(255,255,255,0.06);
+    overflow: hidden;
+  }
+  /* OS views use visibility/opacity so Safari doesn't blank on display toggle */
+  .os-view {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    visibility: hidden; opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+  }
+  .os-view.active {
+    visibility: visible; opacity: 1;
+    pointer-events: auto;
+  }
+  .os-panel {
+    position: absolute; inset: 0;
+    padding: 16px; display: flex; flex-direction: column;
+    visibility: hidden; opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    color: white;
+  }
+  .os-panel.active {
+    visibility: visible; opacity: 1;
+    pointer-events: auto;
+  }
+  .os-modal-overlay {
+    position: absolute; inset: 0;
+    background: rgba(0,0,0,0.85);
+    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
+    z-index: 50; display: flex; align-items: center; justify-content: center;
+    visibility: hidden; opacity: 0;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+  }
+  .os-modal-overlay.active {
+    visibility: visible; opacity: 1;
+  }
+  .os-modal {
+    background: rgba(30,30,32,0.95);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 24px; padding: 32px;
+    text-align: center; max-width: 320px; width: 90%;
+    color: white;
+  }
+  .os-btn {
+    width: 100%; padding: 10px 16px;
+    background: linear-gradient(135deg, #4CD3B3, #3D867C);
+    color: #000; font-weight: 700; font-size: 13px;
+    border-radius: 12px; border: none; cursor: pointer;
+    transition: opacity 0.2s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .os-btn:hover { opacity: 0.85; }
+  .progress-bar-bg {
+    width: 100%; height: 4px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 2px; overflow: hidden;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #4CD3B3, #3D867C);
+    border-radius: 2px;
+    transition: width 1.8s cubic-bezier(0.4,0,0.2,1);
+  }
+
+  /* Isometric pod simulation */
+  .iso-wrapper {
+    perspective: 800px;
+    overflow: hidden;
+  }
+  .iso-pod {
+    -webkit-transform-style: preserve-3d;
+    transform-style: preserve-3d;
+    -webkit-transform: rotateX(60deg) rotateZ(-45deg);
+    transform: rotateX(60deg) rotateZ(-45deg);
+    position: relative;
+    width: 160px; height: 160px;
+    margin: 60px auto;
+  }
+  .iso-pod-sim {
+    -webkit-animation: spin360 18s linear infinite;
+    animation: spin360 18s linear infinite;
+  }
+  .iso-built-pod {
+    -webkit-transform-style: preserve-3d;
+    transform-style: preserve-3d;
+    -webkit-transform: rotateX(60deg) rotateZ(-45deg);
+    transform: rotateX(60deg) rotateZ(-45deg);
+    position: relative;
+    width: 160px; height: 160px;
+    margin: 60px auto;
+    -webkit-animation: spin360 25s linear infinite;
+    animation: spin360 25s linear infinite;
+  }
+  /* Pod faces */
+  .f-floor {
+    position: absolute; width: 160px; height: 160px;
+    background: linear-gradient(135deg, #e8dac8, #d4c8b4);
+    border: 1px solid rgba(255,255,255,0.3);
+    -webkit-transform: translateZ(0px);
+    transform: translateZ(0px);
+  }
+  .sim-floor {
+    background: #0d1a12;
+  }
+  .f-north {
+    position: absolute; width: 160px; height: 80px;
+    background: rgba(230,220,210,0.9);
+    border: 1px solid rgba(255,255,255,0.4);
+    -webkit-transform-origin: top;
+    transform-origin: top;
+    -webkit-transform: rotateX(90deg);
+    transform: rotateX(90deg);
+    top: 0;
+  }
+  .f-west {
+    position: absolute; width: 80px; height: 160px;
+    background: rgba(215,205,195,0.85);
+    border: 1px solid rgba(255,255,255,0.35);
+    -webkit-transform-origin: left;
+    transform-origin: left;
+    -webkit-transform: rotateY(-90deg);
+    transform: rotateY(-90deg);
+    left: 0;
+  }
+  .f-east-solid {
+    position: absolute; width: 80px; height: 160px;
+    background: rgba(200,190,180,0.8);
+    border: 1px solid rgba(255,255,255,0.3);
+    -webkit-transform-origin: right;
+    transform-origin: right;
+    -webkit-transform: rotateY(90deg);
+    transform: rotateY(90deg);
+    right: 0;
+  }
+  .f-south {
+    position: absolute; width: 160px; height: 80px;
+    background: rgba(220,215,205,0.7);
+    border: 1px solid rgba(255,255,255,0.3);
+    -webkit-transform-origin: bottom;
+    transform-origin: bottom;
+    -webkit-transform: rotateX(-90deg);
+    transform: rotateX(-90deg);
+    bottom: 0;
+  }
+  .f-south-door {
+    position: absolute; bottom: 0; left: 55px;
+    width: 50px; height: 60px;
+    background: rgba(76,211,179,0.15);
+    border: 1px solid rgba(76,211,179,0.4);
+    border-bottom: none;
+  }
+  .f-east {
+    position: absolute; width: 80px; height: 160px;
+    background: rgba(185,220,230,0.25);
+    border: 1px solid rgba(76,211,179,0.2);
+    -webkit-transform-origin: right;
+    transform-origin: right;
+    -webkit-transform: rotateY(90deg);
+    transform: rotateY(90deg);
+    right: 0;
+  }
+  .f-roof {
+    position: absolute; width: 162px; height: 162px;
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.3);
+    -webkit-transform: translateZ(80px);
+    transform: translateZ(80px);
+    left: -1px; top: -1px;
+  }
+  /* Simulation blocks */
+  .sim-laser-plane {
+    position: absolute; left: 0; right: 0; height: 2px;
+    background: rgba(76,211,179,0.8);
+    box-shadow: 0 0 12px rgba(76,211,179,0.6);
+    -webkit-transform: translateZ(20px);
+    transform: translateZ(20px);
+    -webkit-animation: scanLine 2.5s ease-in-out infinite;
+    animation: scanLine 2.5s ease-in-out infinite;
+  }
+  .sim-eps-block {
+    position: absolute;
+    -webkit-transform-style: preserve-3d;
+    transform-style: preserve-3d;
+    -webkit-animation: epsDrop 3s ease-out infinite;
+    animation: epsDrop 3s ease-out infinite;
+  }
+  .sim-eps-1 {
+    width: 40px; height: 40px; background: rgba(76,211,179,0.3);
+    border: 1px solid rgba(76,211,179,0.6);
+    left: 20px; top: 20px;
+    -webkit-animation-delay: 0s;
+    animation-delay: 0s;
+  }
+  .sim-eps-2 {
+    width: 50px; height: 30px; background: rgba(61,134,124,0.25);
+    border: 1px solid rgba(61,134,124,0.5);
+    left: 70px; top: 60px;
+    -webkit-animation-delay: 1s;
+    animation-delay: 1s;
+  }
+  .sim-eps-3 {
+    width: 35px; height: 45px; background: rgba(0,113,227,0.2);
+    border: 1px solid rgba(0,113,227,0.4);
+    left: 100px; top: 30px;
+    -webkit-animation-delay: 2s;
+    animation-delay: 2s;
+  }
+
+  /* Rayon / Architectural floorplan */
+  .rayon-floorplan {
+    position: relative; width: 280px; height: 280px;
+    background: #fff; border: 1px solid #e5e7eb;
+    border-radius: 12px; overflow: hidden;
+  }
+  .rayon-zone-main {
+    position: absolute; inset: 20px;
+    border: 2px solid #1d1d1f;
+  }
+  .rayon-wall {
+    position: absolute; background: #1d1d1f;
+  }
+  .rayon-door-arc {
+    position: absolute; bottom: 20px; left: 20px;
+    width: 40px; height: 40px;
+    border-top: 2px dashed #86868b;
+    border-right: 2px dashed #86868b;
+    border-radius: 0 100% 0 0;
+  }
+  .rayon-table {
+    position: absolute; top: 50%; left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    width: 80px; height: 50px;
+    background: #f5f5f7; border: 1px solid #d1d5db;
+    border-radius: 4px;
+  }
+  .rayon-label {
+    position: absolute; font-size: 9px;
+    font-weight: 600; color: #86868b;
+    text-transform: uppercase; letter-spacing: 0.05em;
+  }
 }
 
-/* Keyframes — both prefixed and unprefixed for Safari */
+/* ============================================================
+   Keyframes — -webkit- prefix first for Safari compatibility
+   ============================================================ */
 @-webkit-keyframes fadeInUp {
-  0% { opacity: 0; -webkit-transform: translateY(40px) scale(0.98); transform: translateY(40px) scale(0.98); }
+  0%   { opacity: 0; -webkit-transform: translateY(40px) scale(0.98); transform: translateY(40px) scale(0.98); }
   100% { opacity: 1; -webkit-transform: translateY(0) scale(1); transform: translateY(0) scale(1); }
 }
 @keyframes fadeInUp {
-  0% { opacity: 0; transform: translateY(40px) scale(0.98); }
+  0%   { opacity: 0; transform: translateY(40px) scale(0.98); }
   100% { opacity: 1; transform: translateY(0) scale(1); }
 }
 
-/* Safari-safe fade-in utility classes */
+/* Safari-safe fade-in utility */
 .fade-in-section {
   opacity: 0;
   -webkit-animation: fadeInUp 0.8s cubic-bezier(0.2,0.8,0.2,1) both;
@@ -253,54 +568,130 @@
 .fade-in-section.delay-5 { -webkit-animation-delay: 0.5s; animation-delay: 0.5s; }
 .fade-in-section.delay-6 { -webkit-animation-delay: 0.6s; animation-delay: 0.6s; }
 .fade-in-section.delay-7 { -webkit-animation-delay: 0.7s; animation-delay: 0.7s; }
+
+@-webkit-keyframes spin360 {
+  0%   { -webkit-transform: rotateX(60deg) rotateZ(-40deg); transform: rotateX(60deg) rotateZ(-40deg); }
+  100% { -webkit-transform: rotateX(60deg) rotateZ(320deg); transform: rotateX(60deg) rotateZ(320deg); }
+}
 @keyframes spin360 {
-  0% { transform: rotateX(60deg) rotateZ(-40deg); }
+  0%   { transform: rotateX(60deg) rotateZ(-40deg); }
   100% { transform: rotateX(60deg) rotateZ(320deg); }
 }
+
+@-webkit-keyframes spinSlow {
+  0%   { -webkit-transform: rotateX(60deg) rotateZ(0deg); transform: rotateX(60deg) rotateZ(0deg); }
+  100% { -webkit-transform: rotateX(60deg) rotateZ(360deg); transform: rotateX(60deg) rotateZ(360deg); }
+}
 @keyframes spinSlow {
-  0% { transform: rotateX(60deg) rotateZ(0deg); }
+  0%   { transform: rotateX(60deg) rotateZ(0deg); }
   100% { transform: rotateX(60deg) rotateZ(360deg); }
 }
+
+@-webkit-keyframes scanLine {
+  0%   { -webkit-transform: translateY(-60px); transform: translateY(-60px); opacity: 0; }
+  50%  { opacity: 1; }
+  100% { -webkit-transform: translateY(60px); transform: translateY(60px); opacity: 0; }
+}
 @keyframes scanLine {
-  0% { transform: translateY(-60px); opacity: 0; }
-  50% { opacity: 1; }
+  0%   { transform: translateY(-60px); opacity: 0; }
+  50%  { opacity: 1; }
   100% { transform: translateY(60px); opacity: 0; }
 }
+
+@-webkit-keyframes epsDrop {
+  0%   { -webkit-transform: translateZ(80px); transform: translateZ(80px); opacity: 0; }
+  15%  { -webkit-transform: translateZ(0); transform: translateZ(0); opacity: 1; }
+  85%  { -webkit-transform: translateZ(0); transform: translateZ(0); opacity: 1; }
+  100% { -webkit-transform: translateZ(0); transform: translateZ(0); opacity: 0; }
+}
 @keyframes epsDrop {
-  0% { transform: translateZ(80px); opacity: 0; }
-  15% { transform: translateZ(0); opacity: 1; }
-  85% { transform: translateZ(0); opacity: 1; }
+  0%   { transform: translateZ(80px); opacity: 0; }
+  15%  { transform: translateZ(0); opacity: 1; }
+  85%  { transform: translateZ(0); opacity: 1; }
   100% { transform: translateZ(0); opacity: 0; }
 }
+
+@-webkit-keyframes orbit {
+  0%   { -webkit-transform: translate(-50%,-50%) rotate(0deg); transform: translate(-50%,-50%) rotate(0deg); }
+  100% { -webkit-transform: translate(-50%,-50%) rotate(360deg); transform: translate(-50%,-50%) rotate(360deg); }
+}
 @keyframes orbit {
-  0% { transform: translate(-50%,-50%) rotate(0deg); }
+  0%   { transform: translate(-50%,-50%) rotate(0deg); }
   100% { transform: translate(-50%,-50%) rotate(360deg); }
 }
+
+@-webkit-keyframes orbitReverse {
+  0%   { -webkit-transform: translate(-50%,-50%) rotate(360deg); transform: translate(-50%,-50%) rotate(360deg); }
+  100% { -webkit-transform: translate(-50%,-50%) rotate(0deg); transform: translate(-50%,-50%) rotate(0deg); }
+}
 @keyframes orbitReverse {
-  0% { transform: translate(-50%,-50%) rotate(360deg); }
+  0%   { transform: translate(-50%,-50%) rotate(360deg); }
   100% { transform: translate(-50%,-50%) rotate(0deg); }
 }
+
+@-webkit-keyframes dataFlow {
+  0%   { left: 0%; -webkit-transform: translateX(-100%); transform: translateX(-100%); }
+  100% { left: 100%; -webkit-transform: translateX(0); transform: translateX(0); }
+}
 @keyframes dataFlow {
-  0% { left: 0%; transform: translateX(-100%); }
+  0%   { left: 0%; transform: translateX(-100%); }
   100% { left: 100%; transform: translateX(0); }
+}
+
+@-webkit-keyframes pulseGlow {
+  0%, 100% { box-shadow: 0 0 20px rgba(76,211,179,0.3); }
+  50%       { box-shadow: 0 0 40px rgba(76,211,179,0.6); }
 }
 @keyframes pulseGlow {
   0%, 100% { box-shadow: 0 0 20px rgba(76,211,179,0.3); }
-  50% { box-shadow: 0 0 40px rgba(76,211,179,0.6); }
+  50%       { box-shadow: 0 0 40px rgba(76,211,179,0.6); }
+}
+
+@-webkit-keyframes float {
+  0%, 100% { -webkit-transform: translateY(0); transform: translateY(0); }
+  50%       { -webkit-transform: translateY(-8px); transform: translateY(-8px); }
 }
 @keyframes float {
   0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-8px); }
+  50%       { transform: translateY(-8px); }
+}
+
+@-webkit-keyframes personBob {
+  0%, 100% { -webkit-transform: translateZ(14px) translateY(0); transform: translateZ(14px) translateY(0); }
+  50%       { -webkit-transform: translateZ(14px) translateY(-3px); transform: translateZ(14px) translateY(-3px); }
 }
 @keyframes personBob {
   0%, 100% { transform: translateZ(14px) translateY(0); }
-  50% { transform: translateZ(14px) translateY(-3px); }
+  50%       { transform: translateZ(14px) translateY(-3px); }
+}
+
+@-webkit-keyframes epsFloat {
+  0%, 100% { -webkit-transform: translateY(0); transform: translateY(0); }
+  50%       { -webkit-transform: translateY(-4px); transform: translateY(-4px); }
 }
 @keyframes epsFloat {
   0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-4px); }
+  50%       { transform: translateY(-4px); }
+}
+
+@-webkit-keyframes podSpin {
+  0%   { -webkit-transform: rotateX(-15deg) rotateY(30deg); transform: rotateX(-15deg) rotateY(30deg); }
+  100% { -webkit-transform: rotateX(-15deg) rotateY(390deg); transform: rotateX(-15deg) rotateY(390deg); }
 }
 @keyframes podSpin {
   0%   { transform: rotateX(-15deg) rotateY(30deg); }
   100% { transform: rotateX(-15deg) rotateY(390deg); }
+}
+
+@-webkit-keyframes blob {
+  0%   { -webkit-transform: translate(0px, 0px) scale(1); transform: translate(0px, 0px) scale(1); }
+  33%  { -webkit-transform: translate(30px, -50px) scale(1.1); transform: translate(30px, -50px) scale(1.1); }
+  66%  { -webkit-transform: translate(-20px, 20px) scale(0.9); transform: translate(-20px, 20px) scale(0.9); }
+  100% { -webkit-transform: translate(0px, 0px) scale(1); transform: translate(0px, 0px) scale(1); }
+}
+@keyframes blob {
+  0%   { transform: translate(0px, 0px) scale(1); }
+  33%  { transform: translate(30px, -50px) scale(1.1); }
+  66%  { transform: translate(-20px, 20px) scale(0.9); }
+  100% { transform: translate(0px, 0px) scale(1); }
 }

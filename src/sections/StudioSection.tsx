@@ -79,25 +79,40 @@ interface BoxProps {
 
 function Box3D({ x, y, w, d, h, topC, sideC, frontC, children }: BoxProps) {
   const hw = w / 2, hd = d / 2, hh = h / 2;
-  const faceBase = { position: "absolute" as const, backfaceVisibility: "hidden" as const };
+  const faceBase = {
+    position: "absolute" as const,
+    backfaceVisibility: "hidden" as const,
+    WebkitBackfaceVisibility: "hidden" as const,
+  };
 
   return (
-    <div style={{ position: "absolute", left: x + hw, top: y + hd, width: 1, height: 1, transformStyle: "preserve-3d" }}>
-      {/* All faces positioned from center (0,0,0) via translate */}
+    <div style={{
+      position: "absolute", left: x + hw, top: y + hd, width: 1, height: 1,
+      WebkitTransformStyle: "preserve-3d" as const,
+      transformStyle: "preserve-3d" as const,
+    }}>
       {/* Top */}
-      <div style={{ ...faceBase, width: w, height: d, left: -hw, top: -hd, background: topC, transform: `translateZ(${hh}px)` }} />
+      <div style={{ ...faceBase, width: w, height: d, left: -hw, top: -hd, background: topC, WebkitTransform: `translateZ(${hh}px)`, transform: `translateZ(${hh}px)` }} />
       {/* Bottom */}
-      <div style={{ ...faceBase, width: w, height: d, left: -hw, top: -hd, background: frontC, transform: `translateZ(-${hh}px) rotateX(180deg)` }} />
-      {/* Front — toward viewer (facing the entrance) */}
-      <div style={{ ...faceBase, width: w, height: h, left: -hw, top: -hh, background: frontC, transform: `translateY(-${hd}px) rotateX(90deg)` }} />
+      <div style={{ ...faceBase, width: w, height: d, left: -hw, top: -hd, background: frontC, WebkitTransform: `translateZ(-${hh}px) rotateX(180deg)`, transform: `translateZ(-${hh}px) rotateX(180deg)` }} />
+      {/* Front */}
+      <div style={{ ...faceBase, width: w, height: h, left: -hw, top: -hh, background: frontC, WebkitTransform: `translateY(-${hd}px) rotateX(90deg)`, transform: `translateY(-${hd}px) rotateX(90deg)` }} />
       {/* Back */}
-      <div style={{ ...faceBase, width: w, height: h, left: -hw, top: -hh, background: frontC, transform: `translateY(${hd}px) rotateX(-90deg)` }} />
+      <div style={{ ...faceBase, width: w, height: h, left: -hw, top: -hh, background: frontC, WebkitTransform: `translateY(${hd}px) rotateX(-90deg)`, transform: `translateY(${hd}px) rotateX(-90deg)` }} />
       {/* Left */}
-      <div style={{ ...faceBase, width: d, height: h, left: -hd, top: -hh, background: sideC, transform: `translateX(-${hw}px) rotateY(-90deg)` }} />
+      <div style={{ ...faceBase, width: d, height: h, left: -hd, top: -hh, background: sideC, WebkitTransform: `translateX(-${hw}px) rotateY(-90deg)`, transform: `translateX(-${hw}px) rotateY(-90deg)` }} />
       {/* Right */}
-      <div style={{ ...faceBase, width: d, height: h, left: -hd, top: -hh, background: sideC, transform: `translateX(${hw}px) rotateY(90deg)` }} />
+      <div style={{ ...faceBase, width: d, height: h, left: -hd, top: -hh, background: sideC, WebkitTransform: `translateX(${hw}px) rotateY(90deg)`, transform: `translateX(${hw}px) rotateY(90deg)` }} />
       {/* Children sit on top */}
-      {children && <div style={{ position: "absolute", left: -hw, top: -hd, width: w, height: d, transform: `translateZ(${hh}px)`, transformStyle: "preserve-3d" }}>{children}</div>}
+      {children && (
+        <div style={{
+          position: "absolute", left: -hw, top: -hd, width: w, height: d,
+          WebkitTransform: `translateZ(${hh}px)`, transform: `translateZ(${hh}px)`,
+          WebkitTransformStyle: "preserve-3d" as const, transformStyle: "preserve-3d" as const,
+        }}>
+          {children}
+        </div>
+      )}
     </div>
   );
 }
@@ -118,10 +133,10 @@ function Pod360() {
 
       {/* 3D Scene */}
       <div style={{ perspective: 1000, width: 1, height: 1, position: "relative" }}>
-        <div style={{ position: "absolute", top: 0, left: 0, width: 1, height: 1, transformStyle: "preserve-3d", animation: "podSpin 20s linear infinite" }}>
+        <div style={{ position: "absolute", top: 0, left: 0, width: 1, height: 1, WebkitTransformStyle: "preserve-3d" as const, transformStyle: "preserve-3d" as const, WebkitAnimation: "podSpin 20s linear infinite", animation: "podSpin 20s linear infinite" }}>
 
           {/* ===== FLOOR (the container base) ===== */}
-          <div style={{ position: "absolute", width: W, height: D, top: -hd, left: -hw, transform: `rotateX(90deg) translateZ(-${hh}px)`, transformStyle: "preserve-3d" }}>
+          <div style={{ position: "absolute", width: W, height: D, top: -hd, left: -hw, WebkitTransform: `rotateX(90deg) translateZ(-${hh}px)`, transform: `rotateX(90deg) translateZ(-${hh}px)`, WebkitTransformStyle: "preserve-3d" as const, transformStyle: "preserve-3d" as const }}>
             {/* Floor surface */}
             <div style={{ position: "absolute", inset: 0, background: "linear-gradient(135deg, #eaece3 0%, #dde0d4 100%)", border: "1px solid rgba(61,134,124,0.2)", boxShadow: "inset 0 0 25px rgba(255,255,255,0.5)" }}>
               <div style={{ position: "absolute", inset: 0, backgroundImage: `linear-gradient(rgba(61,134,124,0.06) 1px,transparent 1px),linear-gradient(90deg,rgba(61,134,124,0.06) 1px,transparent 1px)`, backgroundSize: "14px 14px" }} />
