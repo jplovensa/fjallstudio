@@ -5,9 +5,9 @@ import { inspectAttr } from 'kimi-plugin-inspect-react'
 
 // https://vite.dev/config/
 export default defineConfig({
-  // Cloudflare Pages serves assets from an absolute path; '/' is required
-  // so that hashed chunks in /assets/ resolve correctly on all routes.
-  base: '/',
+  // Use repo-name base for GitHub Pages (jplovensa.github.io/fjallstudio)
+  // Cloudflare Pages also works fine with this since it's deployed at the root.
+  base: process.env.GITHUB_ACTIONS ? '/fjallstudio/' : '/',
   plugins: [inspectAttr(), react()],
   server: {
     port: 3000,
