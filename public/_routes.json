@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "description": "SPA routing: serve all paths from index.html; exclude hashed assets so they bypass the Worker and hit the CDN directly.",
+  "include": ["/*"],
+  "exclude": [
+    "/assets/*",
+    "/favicon.ico",
+    "/*.png",
+    "/*.jpg",
+    "/*.webp",
+    "/*.mp4",
+    "/*.svg",
+    "/*.woff2",
+    "/*.woff",
+    "/*.ttf"
+  ]
+}

@@ -1,0 +1,28 @@
+name = "fjallstudio"
+compatibility_date = "2024-09-23"
+
+# ── Cloudflare Pages ──────────────────────────────────────────────────────────
+# Deploy with:  npx wrangler pages deploy dist
+# Or wire the GitHub repo in the Cloudflare dashboard and set:
+#   Build command : npm run build
+#   Output dir    : dist
+pages_build_output_dir = "dist"
+
+# ── Secrets / Environment Variables ──────────────────────────────────────────
+# Add secrets via:  npx wrangler pages secret put MY_SECRET
+# Plaintext vars can be declared per-environment below.
+
+[vars]
+# EXAMPLE_VAR = "value"
+
+[env.preview]
+name = "fjallstudio-preview"
+
+[env.preview.vars]
+# Override vars for preview deployments here
+
+[env.production]
+name = "fjallstudio"
+
+[env.production.vars]
+# Override vars for production deployments here

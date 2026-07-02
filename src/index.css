@@ -1,0 +1,277 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 240 10% 3.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 3.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 3.9%;
+    --primary: 240 5.9% 10%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 240 4.8% 95.9%;
+    --secondary-foreground: 240 5.9% 10%;
+    --muted: 240 4.8% 95.9%;
+    --muted-foreground: 240 3.8% 46.1%;
+    --accent: 240 4.8% 95.9%;
+    --accent-foreground: 240 5.9% 10%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 5.9% 90%;
+    --input: 240 5.9% 90%;
+    --ring: 240 5.9% 10%;
+    --radius: 0.625rem;
+  }
+
+  body {
+    background-color: #f5f5f7;
+    color: #1d1d1f;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", system-ui, sans-serif;
+  }
+}
+
+@layer components {
+  /* Ambient Mesh */
+  .ambient-mesh {
+    position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+    z-index: -1; background: #fbfbfd; overflow: hidden;
+  }
+  .mesh-orb {
+    position: absolute; border-radius: 50%;
+    filter: blur(120px); opacity: 0.5; mix-blend-mode: multiply;
+  }
+
+  /* Glass Cards */
+  .glass-card {
+    background: rgba(255,255,255,0.6);
+    backdrop-filter: blur(40px); -webkit-backdrop-filter: blur(40px);
+    border: 1px solid rgba(255,255,255,0.8); border-radius: 2rem;
+    box-shadow: 0 8px 32px 0 rgba(31,38,135,0.05);
+    transition: all 0.4s cubic-bezier(0.2,0.8,0.2,1);
+  }
+  .glass-card:hover {
+    box-shadow: 0 12px 40px 0 rgba(31,38,135,0.08), inset 0 0 0 1px rgba(255,255,255,1);
+    background: rgba(255,255,255,0.7);
+  }
+  .glass-card-dark {
+    background: rgba(30,30,32,0.8);
+    backdrop-filter: blur(40px); -webkit-backdrop-filter: blur(40px);
+    border: 1px solid rgba(255,255,255,0.1); border-radius: 2rem;
+    box-shadow: 0 12px 40px 0 rgba(0,0,0,0.25); color: white;
+  }
+
+  /* Dynamic Island Nav */
+  .dynamic-island {
+    background: rgba(0,0,0,0.85);
+    backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+    color: white; border-radius: 999px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+  }
+
+  /* iPhone Mockup for App */
+  .iphone-frame {
+    width: 100%; max-width: 300px;
+    background: #1a1a1a; border-radius: 44px;
+    padding: 11px; margin: 0 auto;
+    box-shadow: 0 50px 100px -20px rgba(0,0,0,0.6), inset 0 0 0 2px #333;
+    position: relative;
+  }
+  .iphone-notch {
+    position: absolute; top: 16px; left: 50%; transform: translateX(-50%);
+    width: 96px; height: 26px; background: #000; border-radius: 18px; z-index: 50;
+  }
+  .iphone-screen {
+    background: #000; border-radius: 33px; overflow: hidden;
+    position: relative;
+    height: 620px;
+    border-bottom-left-radius: 33px;
+    border-bottom-right-radius: 33px;
+  }
+
+  /* App Tabs */
+  .app-tab-bar {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    background: rgba(20,20,20,0.92);
+    backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+    border-top: 1px solid rgba(255,255,255,0.06);
+    border-bottom-left-radius: 33px;
+    border-bottom-right-radius: 33px;
+    display: flex; justify-content: space-around;
+    padding: 5px 6px 18px;
+    z-index: 30;
+    overflow: hidden;
+  }
+  .app-tab-btn {
+    display: flex; flex-direction: column; align-items: center; gap: 1px;
+    background: none; border: none; color: #555; font-size: 9px; font-weight: 500;
+    cursor: pointer; transition: all 0.2s; padding: 3px 4px;
+  }
+  .app-tab-btn.active { color: #4CD3B3; }
+  .app-tab-btn:hover { color: #fff; }
+  .app-tab-icon { font-size: 16px; line-height: 1; }
+
+  /* App Screens */
+  .app-screen {
+    position: absolute; inset: 0;
+    display: none; flex-direction: column;
+    opacity: 0; transition: opacity 0.3s ease;
+    overflow: hidden;
+    padding-bottom: 58px;
+  }
+  .app-screen.active { display: flex; opacity: 1; }
+  .app-scroll {
+    overflow-y: auto;
+    flex: 1;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* 3D Isometric - contained */
+  .iso-box {
+    perspective: 1200px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .iso-cube {
+    transform-style: preserve-3d;
+    transform: rotateX(60deg) rotateZ(-40deg);
+    position: relative;
+  }
+
+  /* Progress bar */
+  .progress-track {
+    width: 100%; height: 4px; background: rgba(255,255,255,0.08);
+    border-radius: 2px; overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%; background: linear-gradient(90deg, #4CD3B3, #3D867C);
+    border-radius: 2px; transition: width 0.1s linear;
+  }
+
+  /* Pipeline card */
+  .pipeline-card {
+    width: 80px; height: 80px; border-radius: 1.5rem;
+    background: rgba(255,255,255,0.03);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255,255,255,0.1);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 32px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+    transition: all 0.4s cubic-bezier(0.2,0.8,0.2,1);
+    position: relative; z-index: 10;
+  }
+  .pipeline-card:hover {
+    transform: scale(1.1);
+    background: rgba(255,255,255,0.08);
+    border-color: rgba(255,255,255,0.3);
+  }
+  .pipeline-card.active {
+    background: rgba(76,211,179,0.15);
+    border-color: rgba(76,211,179,0.5);
+    box-shadow: 0 20px 40px rgba(76,211,179,0.2);
+  }
+
+  /* Hub & Spoke */
+  .hub-container {
+    position: relative; width: 100%; height: 300px;
+    display: flex; justify-content: center; align-items: center;
+    overflow: hidden;
+  }
+  .orbital-ring {
+    position: absolute; top: 50%; left: 50%;
+    border-radius: 50%; border: 1px dashed rgba(0,113,227,0.3);
+  }
+  .spoke-node {
+    position: absolute; width: 40px; height: 40px;
+    background: linear-gradient(135deg, #fff, #f5f5f7);
+    border: 1px solid rgba(0,113,227,0.4); border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  }
+
+  /* Bento */
+  .bento-grid {
+    display: grid; grid-template-columns: repeat(12, 1fr); gap: 1rem;
+  }
+  .bento-card {
+    background: white; border-radius: 1.5rem; padding: 1.5rem;
+    border: 1px solid rgba(0,0,0,0.05);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+  }
+
+  /* Dashboard */
+  .dash-metric {
+    background: white; border-radius: 1.25rem; padding: 1.25rem;
+    border: 1px solid rgba(0,0,0,0.05);
+    transition: all 0.3s ease;
+  }
+  .dash-metric:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+  }
+  .dash-dark {
+    background: #1d1d1f; border-radius: 1.25rem; padding: 1.25rem; color: white;
+  }
+}
+
+/* Keyframes */
+@keyframes fadeInUp {
+  0% { opacity: 0; transform: translateY(40px) scale(0.98); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes spin360 {
+  0% { transform: rotateX(60deg) rotateZ(-40deg); }
+  100% { transform: rotateX(60deg) rotateZ(320deg); }
+}
+@keyframes spinSlow {
+  0% { transform: rotateX(60deg) rotateZ(0deg); }
+  100% { transform: rotateX(60deg) rotateZ(360deg); }
+}
+@keyframes scanLine {
+  0% { transform: translateY(-60px); opacity: 0; }
+  50% { opacity: 1; }
+  100% { transform: translateY(60px); opacity: 0; }
+}
+@keyframes epsDrop {
+  0% { transform: translateZ(80px); opacity: 0; }
+  15% { transform: translateZ(0); opacity: 1; }
+  85% { transform: translateZ(0); opacity: 1; }
+  100% { transform: translateZ(0); opacity: 0; }
+}
+@keyframes orbit {
+  0% { transform: translate(-50%,-50%) rotate(0deg); }
+  100% { transform: translate(-50%,-50%) rotate(360deg); }
+}
+@keyframes orbitReverse {
+  0% { transform: translate(-50%,-50%) rotate(360deg); }
+  100% { transform: translate(-50%,-50%) rotate(0deg); }
+}
+@keyframes dataFlow {
+  0% { left: 0%; transform: translateX(-100%); }
+  100% { left: 100%; transform: translateX(0); }
+}
+@keyframes pulseGlow {
+  0%, 100% { box-shadow: 0 0 20px rgba(76,211,179,0.3); }
+  50% { box-shadow: 0 0 40px rgba(76,211,179,0.6); }
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+@keyframes personBob {
+  0%, 100% { transform: translateZ(14px) translateY(0); }
+  50% { transform: translateZ(14px) translateY(-3px); }
+}
+@keyframes epsFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+@keyframes podSpin {
+  0%   { transform: rotateX(-15deg) rotateY(30deg); }
+  100% { transform: rotateX(-15deg) rotateY(390deg); }
+}

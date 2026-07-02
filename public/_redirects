@@ -1,0 +1,5 @@
+# Cloudflare Pages – SPA fallback
+# All paths that don't match a static asset are served index.html (200, not 302).
+# Cloudflare Pages evaluates _redirects AFTER checking for matching static files,
+# so real assets (JS, CSS, images, fonts) are always served directly.
+/*    /index.html    200
